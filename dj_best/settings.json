@@ -1,0 +1,16 @@
+{
+    "DEBUG": true,
+	"active_htmlx": true,
+    "ENV": "local",
+    "ALLOWED_HOSTS": "",
+    "EMAIL_HOST": "mail.amn-negar.com",
+    "EMAIL_HOST_USER": "no-replay@amn-negar.com",
+    "EMAIL_HOST_PASSWORD": "dfsZrxrARZ6VeLfbS9Hk",
+    "cpanel_user": "mycpaneluser",
+    "DB_KIND": "sqlite",
+    "DB_NAME": "dbname",
+    "DB_USER": "dbuser",
+    "DB_PASSWORD": "dbpassword",
+    "DB_HOST": "localhost",
+    "DB_PORT": "3306"
+}

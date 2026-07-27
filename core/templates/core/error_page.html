@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ status_code }} | {{ title }}</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --error-color: #ef4444;
+            --bg-gradient: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            padding: 50px 30px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 10px;
+            background: linear-gradient(to bottom, var(--primary-color), #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.05));
+            letter-spacing: -2px;
+        }
+
+        h2 { font-size: 28px; margin-bottom: 15px; color: #111827; }
+        p { font-size: 18px; color: var(--text-muted); margin-bottom: 30px; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.5);
+            background-color: #4338ca;
+        }
+
+        /* Debug Section */
+        .debug-container {
+            margin-top: 40px;
+            text-align: right;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            padding-top: 20px;
+        }
+
+        .debug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            background: rgba(0,0,0,0.03);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .debug-box {
+            text-align: left;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            direction: ltr;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+        }
+
+        .exception-type {
+            color: #f87171;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        hr { border: 0; border-top: 1px solid #444; margin: 10px 0; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+
+        .icon { width: 20px; height: 20px; fill: currentColor; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <div class="error-code">{{ status_code }}</div>
+        <h2>{{ title }}</h2>
+        <p>{{ message }}</p>
+
+        <a href="/" class="btn">
+            <svg class="icon" viewBox="0 0 20 20">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+            </svg>
+            بازگشت به صفحه اصلی
+        </a>
+
+        {% if debug %}
+            <div class="debug-container">
+                <div class="debug-header" onclick="document.getElementById('debug-content').style.display = document.getElementById('debug-content').style.display === 'none' ? 'block' : 'none'">
+                    <span style="font-weight: bold; color: var(--error-color);">🛠 جزئیات فنی (Debug Mode):</span>
+                    <span>🔽 کلیک برای مشاهده</span>
+                </div>
+                
+                <div id="debug-content" style="display: none;">
+                    <div class="debug-box">
+                        <span class="exception-type">Exception: {{ exception_detail }}</span>
+                        <hr>
+                        <strong>Traceback:</strong>
+                        <pre>{{ traceback }}</pre>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

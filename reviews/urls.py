@@ -1,2 +1,3 @@
 from django.urls import path
-urlpatterns=[]
+from .views import ProductReviewListCreateView
+urlpatterns=[path("products/<int:product_id>/",ProductReviewListCreateView.as_view())]

@@ -1,0 +1,32 @@
+services:
+  web:
+    build: .
+    env_file: .env
+    depends_on: [db, redis]
+    volumes: [media:/app/media, static:/app/staticfiles]
+  worker:
+    build: .
+    command: celery -A dj_best.celery.app worker -l INFO
+    env_file: .env
+    depends_on: [db, redis]
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes: [postgres_data:/var/lib/postgresql/data]
+  redis:
+    image: redis:8-alpine
+  nginx:
+    image: nginx:1.29-alpine
+    depends_on: [web]
+    ports: ["80:80"]
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - static:/static:ro
+      - media:/media:ro
+volumes:
+  postgres_data:
+  static:
+  media:
